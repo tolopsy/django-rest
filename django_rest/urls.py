@@ -8,4 +8,5 @@ urlpatterns = [
     path('second/', views.second_view),
     path('third/', views.third_view),
     path('fourth/', views.fourth_view),
+    path('class1/', views.FirstClassView.as_view())
 ]

@@ -1,4 +1,5 @@
 from django.http import JsonResponse, response
+from rest_framework.views import APIView
 
 def first_view(request):
     year = 2021
@@ -20,3 +21,13 @@ def third_view(request):
 
 def fourth_view(request):
     return JsonResponse({'year': 2021})
+
+
+######## Class Based Views with Rest Framework
+class FirstClassView(APIView):
+    
+    def post(self, request):
+        return JsonResponse({"data": ['trying', 'learning', 'practicing']})
+    
+    def get(self, request):
+        return JsonResponse({"data": "This is a successful GET request"})
