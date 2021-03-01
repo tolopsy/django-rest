@@ -1,5 +1,7 @@
 from django.http import JsonResponse, response
+from django.forms.models import model_to_dict
 from rest_framework.views import APIView
+from .models import Brand, Platform, User
 
 def first_view(request):
     year = 2021
@@ -27,7 +29,31 @@ def fourth_view(request):
 class FirstClassView(APIView):
     
     def post(self, request):
-        return JsonResponse({"data": ['trying', 'learning', 'practicing']})
+        new_user = User.objects.create(
+            first_name = request.data['first_name'],
+            last_name = request.data['last_name'],
+            username = request.data['username'],
+            email = request.data["email"],
+            bio = request.data["bio"],
+            phone_number = request.data['phone_number']
+        )
+        
+        return JsonResponse({"data": request.data})
     
     def get(self, request):
-        return JsonResponse({"data": "This is a successful GET request"})
+        platforms = Platform.objects.all().values()
+        return JsonResponse({"data": list(platforms)})
+
+class SecondClassView(APIView):
+    
+    def post(self, request):
+        new_brand = Brand.objects.create(
+            name = request.data["name"],
+            description = request.data["description"]
+        )
+        
+        return JsonResponse({"data": model_to_dict(new_brand)})
+    
+    def get(self, request):
+        brands = Brand.objects.all().values()
+        return JsonResponse({"data": list(brands)})
