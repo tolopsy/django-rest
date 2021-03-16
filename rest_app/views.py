@@ -3,6 +3,8 @@ from django.forms.models import model_to_dict
 from rest_framework.views import APIView
 from .models import Brand, Platform, User
 
+from rest_app.serializers import BrandSerializer, BrandValidateSerializer
+
 def first_view(request):
     year = 2021
     return response.HttpResponse(f"Displaying year now: {year}")
@@ -44,6 +46,7 @@ class FirstClassView(APIView):
         platforms = Platform.objects.all().values()
         return JsonResponse({"data": list(platforms)})
 
+
 class SecondClassView(APIView):
     
     def post(self, request):
@@ -57,3 +60,40 @@ class SecondClassView(APIView):
     def get(self, request):
         brands = Brand.objects.all().values()
         return JsonResponse({"data": list(brands)})
+
+
+class BrandAPIView(APIView):
+
+    def post(self, request):
+        new_brand = Brand.objects.create(
+            name = request.data["name"],
+            description = request.data["description"],
+            address = request.data["address"],
+            phone_number = request.data["phone_number"],
+            amount_earned = request.data["amount_earned"]
+        )
+        
+        return JsonResponse({"data": BrandSerializer(new_brand).data})
+    
+    def get(self, request):
+        brands = Brand.objects.all().values()
+        return JsonResponse({"data": BrandSerializer(brands, many=True).data})
+
+
+# BrandValidateAPIView post method will raise an exception if any required field data is not provided
+class BrandValidateAPIView(APIView):
+
+    def post(self, request):
+        serializer = BrandValidateSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        new_brand = Brand.objects.create(
+            name = request.data["name"],
+            phone_number = request.data["phone_number"],
+            amount_earned = request.data["amount_earned"]
+        )
+        
+        return JsonResponse({"data": BrandValidateSerializer(new_brand).data})
+    
+    def get(self, request):
+        brands = Brand.objects.all().values()
+        return JsonResponse({"data": BrandValidateSerializer(brands, many=True).data})
