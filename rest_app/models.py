@@ -10,6 +10,7 @@ Four models
 2. Platform
 3. Content
 4. Sale
+5. Brand
 '''
 
 AbstractUser._meta.get_field('email')._unique = True  # Ensures that user's e-mail address is unique
@@ -108,3 +109,10 @@ class Sale(models.Model):
 class Brand(models.Model):
     name = models.CharField(max_length=50)
     description = models.TextField()
+    address = models.CharField(max_length=100,  blank=True)
+    is_active = models.BooleanField(default=True)
+    phone_number =  models.PositiveIntegerField()
+    amount_earned = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+
+    date_created = models.DateTimeField(auto_now_add=True)
+    date_updated = models.DateTimeField(auto_now=True)
