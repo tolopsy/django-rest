@@ -3,7 +3,7 @@ from django.forms.models import model_to_dict
 from rest_framework.views import APIView
 from .models import Brand, Platform, User
 
-from rest_app.serializers import BrandSerializer, BrandValidateSerializer
+from rest_app.serializers import BrandSerializer, BrandValidateSerializer, BrandValidateCreateSerializer
 
 def first_view(request):
     year = 2021
@@ -97,3 +97,17 @@ class BrandValidateAPIView(APIView):
     def get(self, request):
         brands = Brand.objects.all().values()
         return JsonResponse({"data": BrandValidateSerializer(brands, many=True).data})
+
+
+# Demostrating the improvement on BrandValidateSerializer in BrandValidateCreateSerializer
+class BrandValidateCreateAPIView(APIView):
+
+    def post(self, request):
+        serializer =BrandValidateCreateSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return JsonResponse({"data": serializer.data})
+    
+    def get(self, request):
+        brands = Brand.objects.all().values()
+        return JsonResponse({"data": BrandValidateCreateSerializer(brands, many=True).data})

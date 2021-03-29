@@ -11,5 +11,6 @@ urlpatterns = [
     path('class1/', views.FirstClassView.as_view()),
     path('class2/', views.SecondClassView.as_view()),
     path('serialized1/', views.BrandAPIView.as_view()),
-    path('serialized2/', views.BrandValidateAPIView.as_view())
+    path('serialized2/', views.BrandValidateAPIView.as_view()),
+    path('serialized3/', views.BrandValidateCreateAPIView.as_view()),
 ]
